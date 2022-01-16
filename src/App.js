@@ -8,6 +8,16 @@ class App extends React.Component {
     super();
     this.state = { images: [] };
   }
+
+  componentDidMount() {
+    setTimeout(async () => {
+      const response = await unsplash.get(`/search/photos`, {
+        params: { query: "pakistan" },
+      });
+      this.setState({ images: response.data.results });
+    }, 100);
+  }
+
   onSubmitForm = async (term) => {
     const response = await unsplash.get(`/search/photos`, {
       params: { query: term },
@@ -18,7 +28,7 @@ class App extends React.Component {
     return (
       <div className="ui container" style={{ marginTop: "10px" }}>
         <SearchBar onSubmit={this.onSubmitForm} />
-        Images : {this.state.images.length}
+        Images Found: {this.state.images.length}
         <ImageList images={this.state.images} />
       </div>
     );
